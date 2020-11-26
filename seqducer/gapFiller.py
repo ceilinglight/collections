@@ -25,7 +25,8 @@ def main():
         if value['hit'][5] == 'plus':
             offset = int(value['hit'][3])-int(value['hit'][1])
         else:
-            offset = int(value['hit'][4])-int(value['hit'][1])
+            continue
+#             offset = int(value['hit'][4])-int(value['hit'][2])
         reads[identifier]['offset'] = offset
 
     output_string = ''
@@ -33,6 +34,8 @@ def main():
     # Justify offset
     min_offset = min([value['offset'] for value in reads.values()])
     for identifier, value in reads.items():
+        if value['hit'][5] == 'minus':
+            continue
         reads[identifier]['offset'] -= min_offset
         output_string += f'>{identifier}\n'
         output_string += '-'*reads[identifier]['offset']
