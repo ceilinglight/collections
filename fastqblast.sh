@@ -20,18 +20,15 @@ awk '
 }
 
 declare -A Filetype_array
-for constant in ASCII gzip
-do
-    array[$constant]=1
-done
+Filetype_array=(['gzip']=1 ['ASCII']=1)
 
 Filetype=$(file -b $1 | cut -d ' ' -f 1)
-if [[ ${Filetype_array[$Filetype] ]]
+if [[ ${Filetype_array[$Filetype]} ]]
 then
 	Fastq_command='zless $1 | fastq2fasta'
 else
 	exit 1
-	
+fi
 
 blastn \
 	-query <(eval $Fastq_command) \
