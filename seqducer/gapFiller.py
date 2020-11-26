@@ -10,7 +10,7 @@ def main():
     # Open reads.fasta
     with open(sys.argv[1]) as in_file:
         for record in SeqIO.parse(in_file, 'fasta'):
-            reads[records.id]['record'] = record
+            reads[record.id]['record'] = record
 
     # Open reads.coor
     with open(sys.argv[2]) as in_file:
@@ -32,7 +32,7 @@ def main():
     output_string = ''
 
     # Justify offset
-    min_offset = min([value['offset'] for value in reads.values()])
+    min_offset = min([value['offset'] if value['hit'][5]=='plus' else 99999 for value in reads.values()])
     for identifier, value in reads.items():
         if value['hit'][5] == 'minus':
             continue
