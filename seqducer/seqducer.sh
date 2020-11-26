@@ -39,6 +39,6 @@ blastn \
 	-outfmt "6 qaccver qstart qend sstart send sstrand" \
 	-word_size 32 > $Coor_file
 
-Read_identifiers='cut -f 1 $Coor_file | sort | uniq'
+cut -f 1 $Coor_file | sort | uniq > ${1}.id
 
-less $1 | grep -A1 -f <(eval $Read_identifiers) --no-group-separator | fastq2fasta > $3
+zless $1 | grep -A3 -f ${1}.id --no-group-separator | fastq2fasta > $3
