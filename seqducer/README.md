@@ -1,5 +1,5 @@
 # Seqducer
-A script to gather similar sequences and make a rough msa.
+A script to gather similar sequences and make a rough msa in FASTA format.
 
 ## Requirements
 The script has the following requirements:
@@ -13,5 +13,5 @@ Python library:
 
 ## Usage
 ```
-$ ./seqducer.sh FASTQ FASTA_reference_sequence [MSA_output]
+$ ./seqducer.sh sequences.fasta/fastq reference.fasta > msa_output.fasta
 ```
