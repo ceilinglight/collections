@@ -4,6 +4,15 @@ from Bio import SeqIO
 from collections import defaultdict
 import sys
 
+def find_start_base(SeqRecord):
+    start = 0
+    for nuc in SeqRecord.seq:
+        if nuc == '-':
+            start += 1
+        else:
+            break
+    return start
+
 def main():
     reads = defaultdict(dict)
     # To do: Convert sys.argv to argparse
@@ -25,26 +34,29 @@ def main():
         if value['hit'][5] == 'plus':
             offset = int(value['hit'][3])-int(value['hit'][1])
         else:
-            continue
-#             offset = int(value['hit'][4])-int(value['hit'][2])
+            offset = int(value['hit'][4])+int(value['hit'][2])-len(reads[identifier]['record'])+1
         reads[identifier]['offset'] = offset
 
     output_string = ''
 
     # Justify offset
-    min_offset = min([value['offset'] if value['hit'][5]=='plus' else 99999 for value in reads.values()])
+    min_offset = min([value['offset'] for value in reads.values()])
+
+    gapped_records = []
     for identifier, value in reads.items():
         if value['hit'][5] == 'minus':
-            continue
+            seq = str(reads[identifier]['record'].seq.reverse_complement().upper())
+        else:
+            seq = str(value['record'].seq.upper())
         reads[identifier]['offset'] -= min_offset
-        output_string += f'>{identifier}\n'
-        output_string += '-'*reads[identifier]['offset']
-        output_string += str(value['record'].seq.upper())
-        output_string += '\n'
+        seq = '-'*reads[identifier]['offset'] + seq
+        gapped_records.append(SeqIO.SeqRecord(seq, id=identifier))
 
-    # with open(sys.arg[3], 'w') as out_file:
-    #     out_file.write(output_string)
-    print(output_string)
+    gapped_records = sorted(gapped_records, key=lambda x: find_start_base(x))
+    for record in gapped_records:
+        print(f'>{record.id}')
+        print(f'{record.seq.upper()}')
+    print()
 
 if __name__ == "__main__":
     main()
