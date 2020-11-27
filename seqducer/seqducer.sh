@@ -37,8 +37,14 @@ blastn \
 	-subject $2 \
 	-dust no \
 	-outfmt "6 qaccver qstart qend sstart send sstrand" \
-	-word_size 32 > $Coor_file
+	-word_size 32 \
+	-reward 1 \
+	-penalty -1 \
+	-gapopen 4 \
+	-gapextend 1 > $Coor_file
 
 cut -f 1 $Coor_file | sort | uniq > ${1}.id
 
-zless $1 | grep -A3 -f ${1}.id --no-group-separator | fastq2fasta > $3
+zless $1 | grep -A3 -f ${1}.id --no-group-separator | fastq2fasta > ${1}_hits.fasta
+
+python gapFiller.py ${1}_hits.fasta ${1}.coor > $3
