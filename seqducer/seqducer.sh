@@ -47,4 +47,4 @@ cut -f 1 $Coor_file | sort | uniq > ${1}.id
 
 zless $1 | grep -A3 -f ${1}.id --no-group-separator | fastq2fasta > ${1}_hits.fasta
 
-python gapFiller.py ${1}_hits.fasta ${1}.coor > $3
+python gapFiller.py ${1}_hits.fasta ${1}.coor
