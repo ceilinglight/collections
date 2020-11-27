@@ -9,7 +9,7 @@ The script has the following requirements:
 * [python][2] version 3.8
 
 Python library:
-* [BioPython][3] version 1.78
+* [Biopython][3] version 1.78
 
 ## Usage
 ```
