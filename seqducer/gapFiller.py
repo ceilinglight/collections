@@ -26,15 +26,19 @@ def main():
         for line in in_file:
             line = line.split()
             if 'hit' in reads[line[0]].keys():
-                continue
-            reads[line[0]]['hit'] = line
+                match_len = int(line[2])-int(line[1])
+                old_match_len = int(reads[line[0]]['hit'][2])-int(reads[line[0]]['hit'][1])
+                if match_len > old_match_len:
+                    reads[line[0]]['hit'] = line
+            else:
+                reads[line[0]]['hit'] = line
 
     # Calculate offset value
     for identifier, value in reads.items():
         if value['hit'][5] == 'plus':
             offset = int(value['hit'][3])-int(value['hit'][1])
         else:
-            offset = int(value['hit'][4])+int(value['hit'][2])-len(reads[identifier]['record'])+1
+            offset = int(value['hit'][4])+int(value['hit'][2])-len(reads[identifier]['record'])-1
         reads[identifier]['offset'] = offset
 
     output_string = ''
@@ -57,6 +61,7 @@ def main():
         print(f'>{record.id}')
         print(f'{record.seq.upper()}')
     print()
+
 
 if __name__ == "__main__":
     main()
