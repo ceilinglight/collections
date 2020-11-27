@@ -19,7 +19,11 @@ awk '
 }'
 }
 
-Coor_file=${1}.coor
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+File_prefix=$PWD/${1##*/}
+Coor_file=${File_prefix}.coor
+Id_file=${File_prefix}.id
+Fasta_file=${File_prefix}.fasta
 
 declare -A Filetype_array
 Filetype_array=(['gzip']=1 ['ASCII']=1)
@@ -43,8 +47,8 @@ blastn \
 	-gapopen 4 \
 	-gapextend 1 > $Coor_file
 
-cut -f 1 $Coor_file | sort | uniq > ${1}.id
+cut -f 1 $Coor_file | sort | uniq > $Id_file
 
-zless $1 | grep -A3 -f ${1}.id --no-group-separator | fastq2fasta > ${1}_hits.fasta
+zless $1 | grep -A3 -f $Id_file --no-group-separator | fastq2fasta > $Fasta_file
 
-python gapFiller.py ${1}_hits.fasta ${1}.coor
+python3 $DIR/gapFiller.py $Fasta_file $Coor_file
