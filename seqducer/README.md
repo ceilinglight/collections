@@ -7,7 +7,7 @@ The script has the following requirements:
 	NCBI BLAST+ version 2.10.0
 
 	python version 3.8
-		Library:
+	Library:
 		BioPython version 1.78
 
 ## Usage
